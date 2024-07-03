@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
+          cache-dependency-path: './ui'
 
       - name: Get pnpm store directory
         shell: bash
