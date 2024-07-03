@@ -50,7 +50,7 @@ jobs:
 
       - name: Git Version
         id: version
-        uses: bitshifted/git-auto-semver@v1
+        uses: tomerfi/version-bumper-action@2.0.1
 
       - name: Set up Docker Buildx
         id: buildx
@@ -64,4 +64,4 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           platforms: linux/amd64,linux/arm64,linux/arm
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.version.outputs.version-string }}
+          tags: ${{ steps.version.outputs.next  }}
