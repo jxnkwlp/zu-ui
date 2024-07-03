@@ -50,7 +50,7 @@ jobs:
 
       - name: Git Version
         id: version
-        uses: codacy/git-version@2.7.1
+        uses: bitshifted/git-auto-semver@v1
 
       - name: Set up Docker Buildx
         id: buildx
@@ -64,4 +64,4 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           platforms: linux/amd64,linux/arm64,linux/arm
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.version.outputs.version }}
+          tags: ${{ steps.version.outputs.version-string }}
