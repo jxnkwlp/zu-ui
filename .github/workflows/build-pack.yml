@@ -40,14 +40,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
+      - name: UI build & pack
         run: |
           cd ./ui
           pnpm install
 
       - name: build
         run: |
+          cd ./ui
           pnpm run build
+          mkdir -p ../docker/app
           cp -rf ./dist/ ../docker/app
 
       - name: Set up Docker Buildx
