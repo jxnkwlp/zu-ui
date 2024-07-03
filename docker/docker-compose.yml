@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  zerotier:
+    image: zyclonite/zerotier
+    container_name: zerotier
+    restart: unless-stopped
+    volumes:
+      - ./zerotier-one:/var/lib/zerotier-one
+    environment:
+      - ZT_OVERRIDE_LOCAL_CONF=true
+      - ZT_ALLOW_MANAGEMENT_FROM=0.0.0.0/0
+    expose:
+      - "9993/tcp"
+    ports:
+      - "9993:9993/udp"
+      - "9993:9993/tcp"
+  ui:
+    image: jxnkwlp/zt-ui:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - zerotier
+    volumes:
+      - ./zerotier-one:/var/lib/zerotier-one
+    environment:
+      - ZU_CONTROLLER_ENDPOINT=http://zerotier:9993
+      - ZU_USERNAME=admin
+      - ZU_PASSWORD=admin
+    ports:
+      - 5000:5000
