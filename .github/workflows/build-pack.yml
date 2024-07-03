@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 18
           cache: "pnpm"
-          cache-dependency-path: './ui'
+          cache-dependency-path: "./ui"
 
       - name: Get pnpm store directory
         shell: bash
@@ -44,24 +44,24 @@ jobs:
         run: |
           cd ./ui
           pnpm install
-
-      - name: build
-        run: |
-          cd ./ui
           pnpm run build
           mkdir -p ../docker/app
           cp -rf ./dist/ ../docker/app
+
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
 
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
 
-      # - name: Docker build and push
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./
-      #     file: ./docker/zero-ui/Dockerfile
-      #     builder: ${{ steps.buildx.outputs.name }}
-      #     platforms: linux/amd64,linux/arm64,linux/arm
-      #     push: ${{ github.event_name != 'pull_request' }}
-      #     tags: ${{ steps.prep_zero-ui.outputs.tags }}
+      - name: Docker build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./docker
+          file: ./Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          platforms: linux/amd64,linux/arm64,linux/arm
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.version.outputs.version }}
