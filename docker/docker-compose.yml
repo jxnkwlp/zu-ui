@@ -16,7 +16,7 @@ services:
       - "9993:9993/udp"
       - "9993:9993/tcp"
   ui:
-    image: jxnkwlp/zt-ui:latest
+    image: passingwind/zt-ui:latest
     build:
       context: .
       dockerfile: ./Dockerfile
